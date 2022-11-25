@@ -502,9 +502,15 @@ defmodule Phoenix.Presence do
 
   @doc false
   def handle_info({task_ref, {:phoenix, ref, computed_diffs}}, state) do
+    require Logger
+    Logger.error("== handle_info")
     %{current_task: current_task} = state
+    Logger.error("== current_task = #{inspect(current_task, pretty: true)}")
     {^ref, %Task{ref: ^task_ref} = task} = current_task
-    {:exit, _} = Task.shutdown(task)
+    Logger.error("== ref = #{inspect(ref, pretty: true)}")
+    Logger.error("== task = #{inspect(task, pretty: true)}")
+    ret = Task.shutdown(task)
+    Logger.error("== Task.shutdown returns #{inspect(ret, pretty: true)}")
 
     Enum.each(computed_diffs, fn {topic, presence_diff} ->
       Phoenix.Channel.Server.local_broadcast(
