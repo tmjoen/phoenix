@@ -511,9 +511,9 @@ defmodule Phoenix.Presence do
     Logger.error("== ref = #{inspect(ref, pretty: true)}")
     Logger.error("== task = #{inspect(task, pretty: true)}")
     Logger.error("== task alive? #{inspect(Process.alive?(task.pid))}")
-    {:exit, _} = Task.shutdown(task)
+    {:exit, _} = Task.shutdown(task, :brutal_kill)
     # Logger.error("== Task.shutdown returns #{inspect(ret, pretty: true)}")
-    # Logger.error("== task alive? #{inspect(Process.alive?(task.pid))}")
+    Logger.error("== task alive? #{inspect(Process.alive?(task.pid))}")
 
     Enum.each(computed_diffs, fn {topic, presence_diff} ->
       Phoenix.Channel.Server.local_broadcast(
